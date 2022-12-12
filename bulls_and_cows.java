@@ -8,9 +8,9 @@ public class Main
     static final int NUM_LEN = 4;
     static final String WIN_MESSAGE = "Да!\n";
     static final String LOSE_MESSAGE = "Лажа...";
-    static int aimNum;
+    static int riddleNumber;
     static int attempt;
-    static boolean eog = false;
+    static boolean endOfGame = false;
     static boolean win;
     
     public static class Digit {
@@ -31,7 +31,7 @@ public class Main
         }
     }
     
-    public static int genNum() {
+    public static int generateNumber() {
         List<Integer> digits = new ArrayList<>();
         digits.addAll(List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
         int result = 0;
@@ -46,20 +46,19 @@ public class Main
     
     public static void initScreen() {
 		System.out.println("============ Быки и коровы =============");
-		aimNum = genNum();
+		riddleNumber = generateNumber();
 		attempt = 10;
 		win = false;
-// 		System.out.println("Задумано число: " + aimNum);
     }
     
-    public static Digit check(int num) {
-        String sNum = String.valueOf(num);
-        String sAim = String.valueOf(aimNum);
+    public static Digit check(int number) {
+        String strNumber = String.valueOf(number);
+        String strSolve = String.valueOf(riddleNumber);
         int bulls = 0, cows = 0;
         for (int i = 0; i < NUM_LEN; i++) {
-            if (sNum.charAt(i) == sAim.charAt(i)) bulls++;
+            if (strNumber.charAt(i) == strSolve.charAt(i)) bulls++;
             for (int j = 0; j < NUM_LEN; j++) {
-                if ((sNum.charAt(i) == sAim.charAt(j)) && (i != j)) cows++;
+                if ((strNumber.charAt(i) == strSolve.charAt(j)) && (i != j)) cows++;
             }
         }
         if (bulls == 4) win = true;
@@ -69,22 +68,22 @@ public class Main
 	public static void main(String[] args) throws Exception {
 	    initScreen();
 	    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-	    int num = 0;
-	    while (!eog) {
-	        while (num != aimNum && attempt > 0) {
+	    int number = 0;
+	    while (!endOfGame) {
+	        while (number != riddleNumber && attempt > 0) {
 	            System.out.print(" -> "); 
-	            num = Integer.parseInt(reader.readLine());
+	            number = Integer.parseInt(reader.readLine());
 	            System.out.println("Попыток осталось: " + attempt);
-	            System.out.println(check(num));
+	            System.out.println(check(number));
 	            attempt--;
 	        }
 	        if (win) System.out.print(WIN_MESSAGE);
 	        else {
-	            System.out.println("Задумано число: " + aimNum);
+	            System.out.println("Задумано число: " + riddleNumber);
 	            System.out.print(LOSE_MESSAGE);
 	        }
 	        System.out.print(" Ще? (y/n) ");
-	        if (reader.readLine().equals("n")) eog = true;
+	        if (reader.readLine().equals("n")) endOfGame = true;
 	    }
 	    reader.close();
 	}
